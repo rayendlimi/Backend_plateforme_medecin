@@ -47,9 +47,12 @@ else if(await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })){
 else  {  
 
 Medecin= new medecin(data);
+
 Medecin.photo_profil=filname;
+
 salt = bcrypt.genSaltSync(10);
 Medecin.password= bcrypt.hashSync(data.password, salt);
+
 Medecin.save()
 .then(
     (savedMedecin)=>{
@@ -79,7 +82,7 @@ router.get('/all', (req,res)=>{
     )
 })
 
-// login
+// login medecin
 router.post('/login',async (req, res)=>{
 try{
 let data=req.body;
@@ -109,23 +112,12 @@ let isPasswordValid = bcrypt.compareSync(data.password, verifcin.password);
 
             }
 
-/*medecin.findOne({cin_medecin: data.cin_medecin}).then(
-    (med)=>{
-        let data.password=bcrypt.compareSync(data.password, medecin.password);
-        if(!valid){res.send('cin or password invalide')}
-       /* else{
-            let payload={
-                cin_medecin : med.cin_medecin,
-                password : med.password
-            }
-            let token =jwt.sign(payload,'123456789')
-            res.send({mytoken: token})
-        }*/
+
     }}
 catch(err){res.status(500).send({message : err.message})}}
 
 )
-
+/*
 router.delete('/deleteAll', async (req, res) => {
     try {
         const result = await medecin.deleteMany({}); // Deletes all documents in the collection
@@ -133,21 +125,22 @@ router.delete('/deleteAll', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la suppression.", error });
     }
-});
+});*/
 
-    /*
-router.get('/getbyId/:id', (req,res)=>{
-    let id =req.params.id;
-    medecin.findOne({_id : id})
+/*    
+router.get('/getbyCin/:cin_medecin', (req,res)=>{
+    let cin =req.params.cin_medecin;
+    medecin.findOne({cin_medecin : cin})
     .then(
-        (Medecinid)=>
-            {res.status(200).send(Medecinid)}
+        (Medecin)=>
+            {res.status(200).send(Medecin)}
     )
     .catch(
         err=>
             {res.status(400).send (err)}
     )
 })
+
 router.delete('/supprimer/:id', (req,res)=>{
     let id =req.params.id;
     medecin.findByIdAndDelete({_id : id})

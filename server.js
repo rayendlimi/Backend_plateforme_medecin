@@ -4,14 +4,18 @@ const app =express();
 const cors= require('cors');
 app.use(express.json());
 app.use(cors());
-const registermedecin =require("./src/routes/authmedecin")
-const registerpatient =require("./src/routes/authpatient")
 
+const authmedecin =require("./src/routes/authmedecin")
+const authpatient =require("./src/routes/authpatient")
+const authadmin = require("./src/routes/authadmin")
 app.listen(3000, ()=>{ console.log("server is work")});
 
 app.use('/getimage', express.static('../uploads'));
-app.use('/registermedecin', registermedecin);
+app.use('/authmedecin', authmedecin);
 
+app.use('/authpatient', authpatient);
+
+app.use('/authAdmin', authadmin)
 module.exports= data;
 
 
