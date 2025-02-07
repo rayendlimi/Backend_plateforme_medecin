@@ -15,7 +15,6 @@ const   SchemaMedecin=  mongoose.Schema(
     nom_specialite: { type: String, required: true, ref : 'specialite' },
 
 
-
     telephone_personnel: { type: Number, required: true, unique: true },
 
     adresse_cabinet: { type: String, required: true },

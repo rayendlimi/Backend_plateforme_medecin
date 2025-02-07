@@ -2,15 +2,14 @@ const mongoose =require('mongoose');
 
 const   SchemaSecretaire=  mongoose.Schema(
     {
-        id_secretaire: { type: String, required: true },
-
-        cin_medecin: { type: String, required: true, ref: 'medecin' },
-
-        CIN_secretaire: { type: Number, required: true },
-
+      
+        cin_secretaire: { type: Number, required: true, unique : true },
+        
+        cin_medecin: { type: Number, required: true, unique: true, ref: 'medecin' },
+        
         prenom_secretaire: { type: String, required: true },
 
-        email: { type: String, required: true },
+        nom_secretaire: { type: String, required: true },
 
         password: { type: String, required: true },
 

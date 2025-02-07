@@ -30,18 +30,18 @@ const veriftelpersonnel = await medecin.findOne({ telephone_personnel: data.tele
 const veriftelcabinet = await medecin.findOne({ telephone_cabinet: data.telephone_cabinet });*/
 
 if (await medecin.findOne({ cin_medecin: data.cin_medecin })) {
-    res.status(401).send("cin déjà existe");
+    res.status(400).send("cin déjà existe");
 }
 
 else if(await medecin.findOne({ numero_licence: data.numero_licence })){
-    res.status(401).send("num de liscence déja existe")
+    res.status(400).send("num de liscence déja existe")
                     }
 else if(await medecin.findOne({ telephone_personnel: data.telephone_personnel })){
-    res.status(401).send("numero de telephone personnel déja existe")
+    res.status(400).send("numero de telephone personnel déja existe")
 
 }
 else if(await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })){
-    res.status(300).send("numero de telephone de cabinet déja existe")
+    res.status(400).send("numero de telephone de cabinet déja existe")
 
 }          
 else  {  
@@ -159,6 +159,7 @@ router.put('/update/:id', (req,res)=>{
     if (filname.length >0){
         data.image=filname;
     }
+        
     medecin.findByIdAndUpdate({_id : id}, data)
     .then(
         (Medecinupd)=>

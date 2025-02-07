@@ -2,7 +2,7 @@ const mongoose =require('mongoose')
 
 const SchemaSpecialite = mongoose.Schema(
     {
-        nomSpecialite :{
+        nom_specialite :{
             type: String, required : true ,  unique: true
         }
 
