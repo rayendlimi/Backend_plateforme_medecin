@@ -5,11 +5,12 @@ const   SchemaSecretaire=  mongoose.Schema(
       
         cin_secretaire: { type: Number, required: true, unique : true },
         
-        cin_medecin: { type: Number, required: true, unique: true, ref: 'medecin' },
+        cin_medecin: { type: Number, required: false, unique: true, ref: 'medecin' },
         
         prenom_secretaire: { type: String, required: true },
 
         nom_secretaire: { type: String, required: true },
+        email:{type: String, required:true},
 
         password: { type: String, required: true },
 

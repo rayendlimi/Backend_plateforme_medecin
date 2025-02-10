@@ -14,7 +14,8 @@ const   SchemaMedecin=  mongoose.Schema(
 
     nom_specialite: { type: String, required: true, ref : 'specialite' },
 
-
+    email : {type:String, required : true},
+    
     telephone_personnel: { type: Number, required: true, unique: true },
 
     adresse_cabinet: { type: String, required: true },
@@ -23,8 +24,12 @@ const   SchemaMedecin=  mongoose.Schema(
 
     password: { type: String, required: true },
 
+    photo_profil: { type: String, required : false },
 
-    photo_profil: { type: String }
+    isActive : {type : Boolean, default: false},
+    
+    activationCode :{type : String}
+
 
        
 },

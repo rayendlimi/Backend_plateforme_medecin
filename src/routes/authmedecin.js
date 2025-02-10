@@ -5,29 +5,34 @@ const medecin = require('../models/medecin');
 const multer= require('multer');
 const bcrypt =require('bcrypt');
 const jwt= require('jsonwebtoken');
-filname='';
-const mystorage= multer.diskStorage({
-destination: '../uploads',
-filename: (req, file,redirect)=>
+
+const storage= multer.diskStorage({
+destination: './uploads',
+filename: (req, file,redirect) =>
     {
     let date =Date.now();
     let fl = date + '.'+ file.mimetype.split('/')[1];
     //1224565.png(exemple)
     redirect(null,fl);
-    filname=fl;
+   const filname =fl;
+console.log(filname);
 }
 })
-const upload= multer({mystorage})
+const upload= multer({storage})
 //register
-router.post('/register',upload.any('image'), async (req,res)=>{
+router.post('/register',upload.single('photo_profil'), async (req,res)=>{
+
+    const charactere= "azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN";
+    let activationcode="";
+    for(let i =0;i< 25; i++) {
+
+        activationcode += charactere[Math.floor(Math.random() * charactere.length)]; 
+    }
 try{
+    
 const data=req.body;
 
 
-/*const verifcin = await medecin.findOne({ cin_medecin: data.cin_medecin });
-const verifnumliscence = await medecin.findOne({ numero_licence: data.numero_licence });
-const veriftelpersonnel = await medecin.findOne({ telephone_personnel: data.telephone_personnel });
-const veriftelcabinet = await medecin.findOne({ telephone_cabinet: data.telephone_cabinet });*/
 
 if (await medecin.findOne({ cin_medecin: data.cin_medecin })) {
     res.status(400).send("cin déjà existe");
@@ -47,8 +52,7 @@ else if(await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })){
 else  {  
 
 Medecin= new medecin(data);
-
-Medecin.photo_profil=filname;
+Medecin.activationCode= activationcode;
 
 salt = bcrypt.genSaltSync(10);
 Medecin.password= bcrypt.hashSync(data.password, salt);
@@ -56,7 +60,7 @@ Medecin.password= bcrypt.hashSync(data.password, salt);
 Medecin.save()
 .then(
     (savedMedecin)=>{
-         filname ='';
+         filname=''
     res.status(200).send(savedMedecin);}
 )
 .catch(
@@ -87,24 +91,30 @@ router.post('/login',async (req, res)=>{
 try{
 let data=req.body;
 const verifcin = await medecin.findOne({ cin_medecin: data.cin_medecin });
-if (!verifcin){
+if (!verifcin ){
     res.status(400).send("cin introuvable")
-}else{
+}
+
+else{
 
 let isPasswordValid = bcrypt.compareSync(data.password, verifcin.password);
 
-        if (isPasswordValid) {
+        if (isPasswordValid ) {
+             if(verifcin.isActive==false){
+                res.status(400).send("votre compte n'est pas confirmé , nous avons envoyé un email de confirmation ")
             
+            }
+            else {
             let payload = {
                 cin_medecin: verifcin.cin_medecin,
                 password: verifcin.password,  
             };
-
+           
             
             let token = jwt.sign(payload, '123456789'); 
 
             
-            return res.status(200).send({ mytoken: token });
+            return res.status(200).send({ mytoken: token });}
         }
 
             else{
@@ -117,7 +127,7 @@ let isPasswordValid = bcrypt.compareSync(data.password, verifcin.password);
 catch(err){res.status(500).send({message : err.message})}}
 
 )
-/*
+
 router.delete('/deleteAll', async (req, res) => {
     try {
         const result = await medecin.deleteMany({}); // Deletes all documents in the collection
@@ -125,7 +135,7 @@ router.delete('/deleteAll', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la suppression.", error });
     }
-});*/
+});
 
 /*    
 router.get('/getbyCin/:cin_medecin', (req,res)=>{
