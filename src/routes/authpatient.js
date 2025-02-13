@@ -4,8 +4,14 @@ const router = express.Router();
 const patients = require('../models/patients');
 const bcrypt =require('bcrypt');
 const jwt= require('jsonwebtoken');
+const sendVerificationEmail = require('../nodemailer/verifemail');
 
 router.post("/register", async (req, res)=>{
+    const charactere = "azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN";
+    let activationCode = "";
+    for (let i = 0; i < 25; i++) {
+        activationCode += charactere[Math.floor(Math.random() * charactere.length)];
+    }
 try{
 const data= req.body;
 
@@ -20,22 +26,19 @@ else if (await patients.findOne({ telephone: data.telephone }))
     }
 else
 {
-Patient= new patients(data)
+let Patient= new patients(data)
+Patient.activationCode = activationCode;
 
 salt = bcrypt.genSaltSync(10);
 
 Patient.password= bcrypt.hashSync(data.password, salt);
 
-Patient.save()
-.then(
-    (savedpatient)=>{
-         
-    res.status(200).send(savedpatient);}
-)
-.catch(
-    err=>
-        {res.status(400).send (err)}
-)}
+await Patient.save();
+await sendVerificationEmail(Patient.email, Patient.cin_patient, Patient.activationCode);
+res.status(200).send({ message: "Inscription réussie. Vérifiez votre email pour activer votre compte.", patient: Patient });
+
+
+}
 }
 
 catch(err){
@@ -43,6 +46,36 @@ catch(err){
           };
 
 })
+
+//verif email medecin
+
+router.post('/verifpatient/:activationcode', (req,res)=>{
+    let actifcode =req.params.activationcode;
+    patients.findOne({activationCode : actifcode})
+    .then(
+        (actifmed)=>{
+        if(!actifmed){
+                res.status(400).send("ce code d'activation est faut")
+                  }
+        else{
+            actifmed.isActive=true; 
+            actifmed.save()
+            res.status(200).send("Le compte est activé avec succées")
+
+         }
+                         }
+    )
+    .catch(
+        err=>
+            {res.status(400).send (err)}
+    )
+
+})
+
+
+
+
+
 //login patient
 router.post('/login',async (req, res)=>{
 try{

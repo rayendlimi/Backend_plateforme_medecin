@@ -5,6 +5,7 @@ const medecin = require('../models/medecin');
 const multer= require('multer');
 const bcrypt =require('bcrypt');
 const jwt= require('jsonwebtoken');
+const sendVerificationEmail = require('../nodemailer/verifemail');
 
 const storage= multer.diskStorage({
 destination: './uploads',
@@ -20,58 +21,75 @@ console.log(filname);
 })
 const upload= multer({storage})
 //register
-router.post('/register',upload.single('photo_profil'), async (req,res)=>{
 
-    const charactere= "azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN";
-    let activationcode="";
-    for(let i =0;i< 25; i++) {
-
-        activationcode += charactere[Math.floor(Math.random() * charactere.length)]; 
+router.post('/register', upload.single('photo_profil'), async (req, res) => {
+    const charactere = "azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN";
+    let activationCode = "";
+    for (let i = 0; i < 25; i++) {
+        activationCode += charactere[Math.floor(Math.random() * charactere.length)];
     }
-try{
-    
-const data=req.body;
 
+    try {
+        const data = req.body;
 
+        if (await medecin.findOne({ cin_medecin: data.cin_medecin })) {
+            return res.status(400).send("CIN déjà existant");
+        }
 
-if (await medecin.findOne({ cin_medecin: data.cin_medecin })) {
-    res.status(400).send("cin déjà existe");
-}
+        if (await medecin.findOne({ numero_licence: data.numero_licence })) {
+            return res.status(400).send("Numéro de licence déjà existant");
+        }
 
-else if(await medecin.findOne({ numero_licence: data.numero_licence })){
-    res.status(400).send("num de liscence déja existe")
-                    }
-else if(await medecin.findOne({ telephone_personnel: data.telephone_personnel })){
-    res.status(400).send("numero de telephone personnel déja existe")
+        if (await medecin.findOne({ telephone_personnel: data.telephone_personnel })) {
+            return res.status(400).send("Numéro de téléphone personnel déjà existant");
+        }
 
-}
-else if(await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })){
-    res.status(400).send("numero de telephone de cabinet déja existe")
+        if (await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })) {
+            return res.status(400).send("Numéro de téléphone du cabinet déjà existant");
+        }
 
-}          
-else  {  
+        let newMedecin = new medecin(data);
+        newMedecin.activationCode = activationCode;
 
-Medecin= new medecin(data);
-Medecin.activationCode= activationcode;
+        const salt = bcrypt.genSaltSync(10);
+        newMedecin.password = bcrypt.hashSync(data.password, salt);
 
-salt = bcrypt.genSaltSync(10);
-Medecin.password= bcrypt.hashSync(data.password, salt);
+        await newMedecin.save();
 
-Medecin.save()
-.then(
-    (savedMedecin)=>{
-         filname=''
-    res.status(200).send(savedMedecin);}
-)
-.catch(
-    err=>
-        {res.status(400).send (err)}
-)}
-}
-    catch(err){res.status(500).send({message : err.message})};
+        // Envoi de l'email de vérification
+        await sendVerificationEmail(newMedecin.email, newMedecin.cin_medecin, activationCode);
+
+        res.status(200).send({ message: "Inscription réussie. Vérifiez votre email pour activer votre compte.", medecin: newMedecin });
+
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+
+});
+//verif email medecin
+
+router.post('/verifmedecin/:activationcode', (req,res)=>{
+    let actifcode =req.params.activationcode;
+    medecin.findOne({activationCode : actifcode})
+    .then(
+        (actifmed)=>{
+        if(!actifmed){
+                res.status(400).send("ce code d'activation est faut")
+                  }
+        else{
+            actifmed.isActive=true; 
+            actifmed.save();
+            res.status(200).send("Le compte est activé avec succées")
+
+         }
+                  }
+    )
+    .catch(
+        err=>
+            {res.status(400).send (err)}
+    )
 
 })
-
 
 //affiche all medecins
 router.get('/all', (req,res)=>{

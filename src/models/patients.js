@@ -12,8 +12,14 @@ const PatientSchema = new mongoose.Schema({
 
     date_naissance: { type: Date, required: true },
 
-    telephone: { type: Number, required: true, unique: true }
+    email : {type:String, required : true},
 
+
+    telephone: { type: Number, required: true, unique: true },
+
+    isActive : {type : Boolean, default: false},
+
+    activationCode: {type : String}
 });
 
 module.exports = mongoose.model('patient', PatientSchema);

@@ -9,6 +9,8 @@ const authmedecin =require("./src/routes/authmedecin")
 const authpatient =require("./src/routes/authpatient")
 const authadmin = require("./src/routes/authadmin")
 const authsecretaire= require("./src/routes/authsecretaire")
+require('dotenv').config();
+
 app.listen(3000, ()=>{ console.log("server is work")});
 
 app.use('/getimage', express.static('./uploads'));
