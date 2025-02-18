@@ -49,7 +49,8 @@ let data=req.body;
 const verifuser = await admin.findOne({ username: data.username });
 if (!verifuser){
     res.status(400).send("username introuvable")
-}else{
+}
+else{
 
 let isPasswordValid = bcrypt.compareSync(data.password, verifuser.password);
 

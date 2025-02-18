@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const Secretaire = require("../models/secretaire"); // Assurez-vous d'avoir un modèle Secretaire
+const Secretaire = require("../../models/secretaire"); // Assurez-vous d'avoir un modèle Secretaire
 
 const authSecretaire = async (req, res, next) => {
   try {

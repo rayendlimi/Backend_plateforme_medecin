@@ -34,7 +34,7 @@ salt = bcrypt.genSaltSync(10);
 Patient.password= bcrypt.hashSync(data.password, salt);
 
 await Patient.save();
-await sendVerificationEmail(Patient.email, Patient.cin_patient, Patient.activationCode);
+await sendVerificationEmail(Patient.email,"authpatient", Patient.activationCode);
 res.status(200).send({ message: "Inscription réussie. Vérifiez votre email pour activer votre compte.", patient: Patient });
 
 
@@ -47,28 +47,26 @@ catch(err){
 
 })
 
-//verif email medecin
+//verif email patient
 
-router.post('/verifpatient/:activationcode', (req,res)=>{
+router.post('/verifpatient/:activationcode',async (req,res)=>{
+    try{
     let actifcode =req.params.activationcode;
-    patients.findOne({activationCode : actifcode})
-    .then(
-        (actifmed)=>{
-        if(!actifmed){
+    const recherche=await patients.findOne({activationCode : actifcode})
+            console.log(actifcode)
+        if( !recherche){
                 res.status(400).send("ce code d'activation est faut")
                   }
         else{
-            actifmed.isActive=true; 
-            actifmed.save()
+            recherche.isActive=true; 
+            recherche.save()
             res.status(200).send("Le compte est activé avec succées")
 
          }
-                         }
-    )
-    .catch(
-        err=>
-            {res.status(400).send (err)}
-    )
+                         
+    }
+    catch(err){res.status(500).send({message : err.message})}
+
 
 })
 

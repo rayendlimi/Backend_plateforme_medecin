@@ -18,6 +18,7 @@ const PatientSchema = new mongoose.Schema({
     telephone: { type: Number, required: true, unique: true },
 
     isActive : {type : Boolean, default: false},
+    role:{type : String, default: 'patient'},
 
     activationCode: {type : String}
 });

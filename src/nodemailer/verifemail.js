@@ -12,7 +12,7 @@ const sendVerificationEmail = async (email, user, activationCode) => {
             }
         });
 
-        const verificationLink = `https://localhost:3000/${user}/verifmedecin/:${activationCode}`;
+        const verificationLink = `https://localhost:3000/${user}/verifmedecin/${activationCode}`;
 
         let mailOptions = {
             from: process.env.EMAIL_USER,

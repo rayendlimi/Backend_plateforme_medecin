@@ -10,11 +10,15 @@ const   SchemaSecretaire=  mongoose.Schema(
         prenom_secretaire: { type: String, required: true },
 
         nom_secretaire: { type: String, required: true },
+        
         email:{type: String, required:true},
 
         password: { type: String, required: true },
 
-        telephone: { type: Number, required: true }
+        telephone: { type: Number, required: true },
+
+        role:{type : String, default: 'secretaire'}
+
     }
 )
 module.exports=mongoose.model("secretaire", SchemaSecretaire)

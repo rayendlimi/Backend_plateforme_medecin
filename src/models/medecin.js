@@ -28,7 +28,8 @@ const   SchemaMedecin=  mongoose.Schema(
 
     isActive : {type : Boolean, default: false},
     
-    activationCode :{type : String}
+    activationCode :{type : String},
+    role:{type : String,required: false, default: 'medecin'}
 
 
        

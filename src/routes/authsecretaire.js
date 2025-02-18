@@ -4,7 +4,7 @@ const router = express.Router();
 const secretaire = require('../models/secretaire');
 const bcrypt =require('bcrypt');
 const Medecin = require('../models/medecin');
-const authMedecin = require("../middlewares/authMedecin");
+const authMedecin = require("../middlewares/medecin/authMedecin");
 
 const jwt= require('jsonwebtoken');
 

@@ -68,26 +68,24 @@ router.post('/register', upload.single('photo_profil'), async (req, res) => {
 });
 //verif email medecin
 
-router.post('/verifmedecin/:activationcode', (req,res)=>{
-    let actifcode =req.params.activationcode;
-    medecin.findOne({activationCode : actifcode})
-    .then(
-        (actifmed)=>{
-        if(!actifmed){
-                res.status(400).send("ce code d'activation est faut")
-                  }
-        else{
-            actifmed.isActive=true; 
-            actifmed.save();
-            res.status(200).send("Le compte est activé avec succées")
-
-         }
-                  }
-    )
-    .catch(
-        err=>
-            {res.status(400).send (err)}
-    )
+router.post('/verifmedecin/:activationcode', async (req,res)=>{
+     try{
+        let actifcode =req.params.activationcode;
+        const recherche=await medecin.findOne({activationCode : actifcode})
+                console.log(actifcode)
+            if( !recherche){
+                    res.status(400).send("ce code d'activation est faut")
+                      }
+            else{
+                recherche.isActive=true; 
+                recherche.save()
+                res.status(200).send("Le compte est activé avec succées")
+    
+             }
+                             
+        }
+        catch(err){res.status(500).send({message : err.message})}
+    
 
 })
 
@@ -126,6 +124,7 @@ let isPasswordValid = bcrypt.compareSync(data.password, verifcin.password);
             let payload = {
                 cin_medecin: verifcin.cin_medecin,
                 password: verifcin.password,  
+                
             };
            
             
