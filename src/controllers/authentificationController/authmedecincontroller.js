@@ -1,8 +1,10 @@
-const medecin = require("../models/medecin");
+const medecin = require("../../models/medecin");
 const bcrypt = require("bcrypt");
-const sendVerificationEmail = require("../nodemailer/verifemail");
+const sendVerificationEmail = require("../../nodemailer/verifemail");
 
 const register = async (req, res) => {
+
+
   const charactere = "azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN";
   let activationCode = "";
   for (let i = 0; i < 25; i++) {
@@ -13,27 +15,29 @@ const register = async (req, res) => {
     const data = req.body;
 
     if (await medecin.findOne({ cin_medecin: data.cin_medecin })) {
-      return res.status(400).send("CIN déjà existant");
+      return res.status(400).send({message: "CIN déjà existant"});
     }
 
-    if (await medecin.findOne({ numero_licence: data.numero_licence })) {
+    else if (await medecin.findOne({ numero_licence: data.numero_licence })) {
       return res.status(400).send("Numéro de licence déjà existant");
     }
 
-    if (await medecin.findOne({ telephone_personnel: data.telephone_personnel })) {
+    else if (await medecin.findOne({ telephone_personnel: data.telephone_personnel })) {
       return res.status(400).send("Numéro de téléphone personnel déjà existant");
     }
 
-    if (await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })) {
+    else if (await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })) {
       return res.status(400).send("Numéro de téléphone du cabinet déjà existant");
     }
-
+    if (req.file /*req.file.size < 7000000*/ ) {
+      data.photo_profil = req.file.path; 
+    }
+    console.log(req.file)
     let newMedecin = new medecin(data);
     newMedecin.activationCode = activationCode;
 
     const salt = bcrypt.genSaltSync(10);
     newMedecin.password = bcrypt.hashSync(data.password, salt);
-
     await newMedecin.save();
 
     // Envoi de l'email de vérification
@@ -84,10 +88,12 @@ const deleteAllMedecins = async (req, res) => {
   }
 };
 
+
 // Export des contrôleurs
 module.exports = {
   register,
   verifMedecin,
   getAllMedecins,
   deleteAllMedecins,
+  
 };

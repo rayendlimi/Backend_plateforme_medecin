@@ -1,6 +1,6 @@
-const patients = require("../models/patients");
+const patients = require("../../models/patients");
 const bcrypt = require("bcrypt");
-const sendVerificationEmail = require("../nodemailer/verifemail");
+const sendVerificationEmail = require("../../nodemailer/verifemail");
 
 const register = async (req, res) => {
   const charactere = "azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN";

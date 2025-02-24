@@ -16,6 +16,7 @@ const   SchemaSecretaire=  mongoose.Schema(
         password: { type: String, required: true },
 
         telephone: { type: Number, required: true },
+        isActive : {type : Boolean, default: true},
 
         role:{type : String, default: 'secretaire'}
 

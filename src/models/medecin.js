@@ -30,13 +30,12 @@ const   SchemaMedecin=  mongoose.Schema(
     
     activationCode :{type : String},
 
-    cin_secretaire :{type : String,unique: true,default: '', required: false, ref: 'secretaire'},
+    cin_secretaire :{type : String, default: '', required: false, ref: 'secretaire'},
 
 
     role:{type : String,required: false, default: 'medecin'}
 
 
-       
 },
 );
 module.exports= mongoose.model("medecin", SchemaMedecin)

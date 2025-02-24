@@ -1,7 +1,7 @@
-const Medecin = require("../models/medecin");
-const Secretaire = require("../models/secretaire");
-const Patient = require("../models/patients");
-const admin = require("../models/admin");
+const Medecin = require("../../models/medecin");
+const Secretaire = require("../../models/secretaire");
+const Patient = require("../../models/patients");
+const admin = require("../../models/admin");
 
 // Logout function
 const logout = async (req, res) => {

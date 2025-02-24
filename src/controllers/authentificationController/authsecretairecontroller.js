@@ -1,6 +1,6 @@
-const secretaire = require("../models/secretaire");
+const secretaire = require("../../models/secretaire");
 const bcrypt = require("bcrypt");
-const medecin = require("../models/medecin");
+const medecin = require("../../models/medecin");
 
 const register = async (req, res) => {
   try {
@@ -9,7 +9,6 @@ const register = async (req, res) => {
 
     const id_medecin = req.user.userId;
     const authmed = await medecin.findOne({_id: id_medecin });
-    console.log(authmed)
 
 const existingSecretaire = await secretaire.findOne({ cin_medecin: authmed.cin_medecin });
     if (existingSecretaire) {
@@ -32,6 +31,8 @@ const existingSecretaire = await secretaire.findOne({ cin_medecin: authmed.cin_m
     await newSecretaire.save();
     await authmed.save();
     res.status(200).send(newSecretaire);
+    console.log(authmed)
+
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

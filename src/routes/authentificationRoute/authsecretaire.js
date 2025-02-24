@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const secretaireController = require("../controllers/authsecretairecontroller");
-const authMiddleware = require("../middlewares/middleware");
+const secretaireController = require("../../controllers/authentificationController/authsecretairecontroller");
+const authMiddleware = require("../../middlewares/middleware");
 
 // Routes pour Secretaire
 router.post("/register", authMiddleware, secretaireController.register);
