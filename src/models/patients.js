@@ -8,12 +8,13 @@ const PatientSchema = new mongoose.Schema({
 
     prenom_patient: { type: String, required: true },
 
+    sex: { type: String,},
+    
     password: { type: String, required: true },
 
     date_naissance: { type: Date, required: true },
 
     email : {type:String, required : true},
-
 
     telephone: { type: Number, required: true, unique: true },
 

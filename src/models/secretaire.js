@@ -11,7 +11,7 @@ const   SchemaSecretaire=  mongoose.Schema(
 
         nom_secretaire: { type: String, required: true },
         
-        email:{type: String, required:true},
+        email:{type: String, required: true},
 
         password: { type: String, required: true },
 

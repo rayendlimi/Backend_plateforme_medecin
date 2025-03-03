@@ -31,7 +31,6 @@ const existingSecretaire = await secretaire.findOne({ cin_medecin: authmed.cin_m
     await newSecretaire.save();
     await authmed.save();
     res.status(200).send(newSecretaire);
-    console.log(authmed)
 
   } catch (err) {
     res.status(500).send({ message: err.message });

@@ -10,6 +10,8 @@ const   SchemaMedecin=  mongoose.Schema(
 
     prenom: { type: String, required: true },
 
+ville: {type : String, required: false},
+
     numero_licence: { type: Number, required: true, unique: true },
 
     nom_specialite: { type: String, required: true, ref : 'specialite' },
@@ -33,9 +35,9 @@ const   SchemaMedecin=  mongoose.Schema(
     cin_secretaire :{type : String, default: '', required: false, ref: 'secretaire'},
 
 
-    role:{type : String,required: false, default: 'medecin'}
+    role:{type : String,required: false, default: 'medecin'},
 
-
+    refreshToken: { type: String,required: false,   default: '' }
 },
 );
 module.exports= mongoose.model("medecin", SchemaMedecin)

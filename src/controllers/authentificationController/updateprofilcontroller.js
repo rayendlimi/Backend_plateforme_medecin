@@ -45,4 +45,40 @@ const updateProfile= async (req, res)=> {
       res.status(500).json({ message: "erreur de modification", error });
     }
   }
+
+  // affichage by ville
+const GetMedecinByville = async (req, res) => {
+  try {
+    const ville = req.params.ville;
+
+    const medecins = await medecin.find({ ville: ville });
+
+    if (medecins.length === 0) {
+        return res.status(404).send("Aucun médecin trouvé dans cette ville");
+    }
+
+    res.status(200).send(medecins);
+} catch (error) {
+    res.status(500).send("Erreur lors de la recherche des médecins");
+}
+}
+// affichage by specialité
+const GetMedecinBySpecialite = async (req, res) => {
+  try {
+    const specialites = req.params.specialite; 
+
+    const medecins = await medecin.find({ specialite: specialites });
+
+  
+    if (medecins.length === 0) {
+        return res.status(404).send("Aucun médecin trouvé avec cette specialité");
+    }
+
+    res.status(200).send(medecins);
+} catch (error) {
+    res.status(500).send("Erreur lors de la recherche des médecins");
+}
+}
+
+
   module.exports=updateProfile

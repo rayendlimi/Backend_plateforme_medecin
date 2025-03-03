@@ -5,11 +5,14 @@ const Patient = require("../../models/patients");
 const bcrypt = require("bcrypt");
 const admin = require("../../models/admin");
 
+
+
+
 const generateTokens = (user, role) => {
   const accessToken = jwt.sign(
     { userId: user._id, role },
     "123456789",
-    { expiresIn: "120m" } // Short-lived access token
+    { expiresIn: "7d" } // Short-lived access token
   );
 
   const refreshToken = jwt.sign(
@@ -25,7 +28,6 @@ const login = async (req, res) => {
   const data = req.body;
 
   let utilisateur;
-  let role;
 
   // Vérification dans Medecin
   if (await Medecin.findOne({ cin_medecin: data.cin_medecin })) {
@@ -60,10 +62,9 @@ if(utilisateur.isActive==true){
   }
 
   const { accessToken, refreshToken } = generateTokens(utilisateur, utilisateur.role);
-console.log(utilisateur.role)
   utilisateur.refreshToken = refreshToken;
-console.log(utilisateur.refreshToken);
   await utilisateur.save();
+  console.log(utilisateur.refreshToken)
 
   res.json({ accessToken, refreshToken});}
   else{

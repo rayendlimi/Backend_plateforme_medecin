@@ -19,15 +19,15 @@ const register = async (req, res) => {
     }
 
     else if (await medecin.findOne({ numero_licence: data.numero_licence })) {
-      return res.status(400).send("Numéro de licence déjà existant");
+      return res.status(400).send({message:"Numéro de licence déjà existant"});
     }
 
     else if (await medecin.findOne({ telephone_personnel: data.telephone_personnel })) {
-      return res.status(400).send("Numéro de téléphone personnel déjà existant");
+      return res.status(400).send({message:"Numéro de téléphone personnel déjà existant"});
     }
 
     else if (await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })) {
-      return res.status(400).send("Numéro de téléphone du cabinet déjà existant");
+      return res.status(400).send({message:"Numéro de téléphone du cabinet déjà existant"});
     }
     if (req.file /*req.file.size < 7000000*/ ) {
       data.photo_profil = req.file.path; 
