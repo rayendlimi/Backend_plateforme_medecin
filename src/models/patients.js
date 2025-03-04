@@ -22,6 +22,8 @@ const PatientSchema = new mongoose.Schema({
     role:{type : String, default: 'patient'},
 
     activationCode: {type : String}
-});
+    
+}, 
+{ timestamps: true });
 
 module.exports = mongoose.model('patient', PatientSchema);

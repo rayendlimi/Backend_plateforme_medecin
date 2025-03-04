@@ -5,12 +5,12 @@ const authMiddleware=require('../../middlewares/middleware')
 
 // Routes for managing appointments
 router.post('/',authMiddleware, rendezvousController.createRendezvous);
-router.get('/', rendezvousController.getAllRendezvous);
-router.get('/:id', rendezvousController.getRendezvousById);
-router.get('/specialite/:specialite', rendezvousController.getrendezvousbyspecialite);
-router.get('/date/:date', rendezvousController.getrendezvousbydate);
-
-router.put('/:id', rendezvousController.updateRendezvous);
-router.delete('/:id', rendezvousController.deleteRendezvous);
+router.get('/',authMiddleware, rendezvousController.getAllRendezvous);
+router.get('/:id',authMiddleware, rendezvousController.getRendezvousById);
+router.get('/specialite/:specialite',authMiddleware, rendezvousController.getrendezvousbyspecialite);
+router.get('/date/:date',authMiddleware, rendezvousController.getrendezvousbydate);
+router.put('/:id',authMiddleware, rendezvousController.updateRendezvous);
+router.post('/verif/:id',authMiddleware, rendezvousController.confirmerrendezvous);
+router.delete('/:id',authMiddleware, rendezvousController.deleteRendezvous);
 
 module.exports = router;

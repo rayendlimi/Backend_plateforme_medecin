@@ -77,13 +77,24 @@ const getrendezvousbydate= async (req, res) =>{
         res.status(500).send("Erreur lors de la recherche des rendez-vous");
     }
     }
+const confirmerrendezvous = async (req,res)=>{
+let id =req.params.id;
 
+const recherche = await Rendezvous.findOne({ _id: id  });
+console.log(recherche.status)
+if(recherche){
+    recherche.status= true; 
+    res.send(recherche) 
+}
+else 
+res.status(500).send({message: "Erreur de confirmer ce rendez-vous"});
 
+}
 // Get a single rendezvous by ID
 const getRendezvousById = async (req, res) => {
     try {
         const rendezvous = await Rendezvous.findById(req.params.id);
-        if (!rendezvous) return res.status(404).json({ message: 'Rendezvous not found' });
+        if (!rendezvous) return res.status(404).json({ message: "rendezvous n'existe pas " });
         res.status(200).json(rendezvous);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -117,4 +128,5 @@ module.exports = { deleteRendezvous,
     getAllRendezvous,
     createRendezvous,
     getrendezvousbyspecialite,
-    getrendezvousbydate}
+    getrendezvousbydate,
+    confirmerrendezvous}

@@ -15,9 +15,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Routes pour Médecin
+
 router.post("/register", upload.single("photo_profil"), medecinController.register);
 router.post("/verifmedecin/:activationcode", medecinController.verifMedecin);
 router.get("/all", medecinController.getAllMedecins);
-// Export du routeur
+
 module.exports = router;

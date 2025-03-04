@@ -19,6 +19,9 @@ const rendezvousschema = new mongoose.Schema({
 
 
     status: { type: Boolean, default : false }
-});
+},
+{ timestamps: true }
+
+);
 
 module.exports = mongoose.model('rendezvous', rendezvousschema);

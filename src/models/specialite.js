@@ -6,6 +6,6 @@ const SchemaSpecialite = mongoose.Schema(
             type: String, required : true ,  unique: true
         }
 
-    }
+    }, { timestamps: true }
 )
 module.exports= mongoose.model('specialite', SchemaSpecialite)

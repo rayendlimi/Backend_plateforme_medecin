@@ -56,7 +56,6 @@ const verifMedecin = async (req, res) => {
     actifcode = actifcode.substring(1);
 
     const recherche = await medecin.findOne({ activationCode: actifcode });
-    console.log(actifcode);
 
     if (!recherche) {
       res.status(400).send("Ce code d'activation est faux");
@@ -89,7 +88,6 @@ const deleteAllMedecins = async (req, res) => {
 };
 
 
-// Export des contrôleurs
 module.exports = {
   register,
   verifMedecin,
