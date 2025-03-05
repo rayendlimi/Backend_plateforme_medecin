@@ -38,6 +38,6 @@ ville: {type : String, required: false},
     role:{type : String,required: false, default: 'medecin'},
 
     refreshToken: { type: String,required: false,   default: '' }
-},
+},{ timestamps: true }
 );
 module.exports= mongoose.model("medecin", SchemaMedecin)

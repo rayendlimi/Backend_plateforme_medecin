@@ -3,7 +3,7 @@ const router = express.Router();
 const rendezvousController = require('../../controllers/gestion-rendezvous/controller-rendezvous');
 const authMiddleware=require('../../middlewares/middleware')
 
-// Routes for managing appointments
+
 router.post('/',authMiddleware, rendezvousController.createRendezvous);
 router.get('/',authMiddleware, rendezvousController.getAllRendezvous);
 router.get('/:id',authMiddleware, rendezvousController.getRendezvousById);
