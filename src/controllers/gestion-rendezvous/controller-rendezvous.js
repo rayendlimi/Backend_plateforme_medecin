@@ -14,6 +14,7 @@ const createRendezvous = async (req, res) => {
             newRendezvous.medecin =req.user.userId
 
         }
+        
         else if (req.user.role==="secretaire"){
             const sec = await secretaire.findOne({_id:req.user.userId});
             const med = await medecin.findOne({cin_medecin: sec.cin_medecin})

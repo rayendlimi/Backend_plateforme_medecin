@@ -24,6 +24,7 @@ const PatientSchema = new mongoose.Schema({
     activationCode: {type : String}
     
 }, 
-{ timestamps: true });
+{ timestamps: true }
+);
 
 module.exports = mongoose.model('patient', PatientSchema);

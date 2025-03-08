@@ -20,6 +20,6 @@ const   SchemaSecretaire=  mongoose.Schema(
 
         role:{type : String, default: 'secretaire'}
 
-    }
+    }, { timestamps: true }
 )
 module.exports=mongoose.model("secretaire", SchemaSecretaire)

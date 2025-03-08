@@ -13,6 +13,7 @@ const login= require('./src/routes/authentificationRoute/login');
 const logout = require('./src/routes/authentificationRoute/logout');
 const update = require('./src/routes/authentificationRoute/updateprofil');
 const rendezvous = require('./src/routes/gestion-rendezvous/route-rendezvous')
+const consultation = require('./src/routes/gestion-consultations/route-consultation')
 require('dotenv').config();
 
 app.listen(3000, ()=>{ console.log("server is work")});
@@ -25,7 +26,9 @@ app.use('/authAdmin', authadmin);
 app.use('/loginuser', login);
 app.use('/logoutuser', logout);
 app.use('/update',update );
-app.use('/rendezvous',rendezvous )
+app.use('/rendezvous',rendezvous );
+app.use('/consultation',consultation )
+
 
 module.exports= data;
 
