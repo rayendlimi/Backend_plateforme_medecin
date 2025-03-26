@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const registerAdmin = async (req, res) => {
     try {
-        const data = req.body;
+        const data = req.body;  
 
         if (await admin.findOne({ username: data.username })) {
             return res.status(400).send({ message: "Username déjà existant" });

@@ -2,6 +2,7 @@ const patients = require("../../models/patients");
 const bcrypt = require("bcrypt");
 const sendVerificationEmail = require("../../nodemailer/verifemail");
 const DossierMedical=require("../../models/dossier-medical");
+
 const register = async (req, res) => {
   const charactere = "azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN";
   let activationCode = "";
@@ -23,20 +24,21 @@ const register = async (req, res) => {
     let newPatient = new patients(data);
     newPatient.activationCode = activationCode;
 
-    const salt = bcrypt.genSaltSync(10);
-    newPatient.password = bcrypt.hashSync(data.password, salt);
+    newPatient.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(10));
 
     await newPatient.save();
 
     const newDossierMedical = new DossierMedical({
       patient: newPatient._id, 
+      nom_patient: newPatient.nom_patient,
+      prenom_patient: newPatient.prenom_patient,
       rapport: "", 
       antecedents: "" 
   });
   await newDossierMedical.save();
 
     // Envoi de l'email de vérification
-    await sendVerificationEmail(newPatient.email, "authpatient", newPatient.activationCode);
+    await sendVerificationEmail(newPatient.email, newPatient.activationCode);
 
     res.status(200).send({ message: "Inscription réussie. Vérifiez votre email pour activer votre compte.", patient: newPatient });
 

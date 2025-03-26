@@ -29,8 +29,8 @@ const register = async (req, res) => {
     else if (await medecin.findOne({ telephone_cabinet: data.telephone_cabinet })) {
       return res.status(400).send({message:"Numéro de téléphone du cabinet déjà existant"});
     }
-    if (req.file /*req.file.size < 7000000*/ ) {
-      data.photo_profil = req.file.path; 
+    if (req.file || req.file.size<400000 ) {
+      data.photo_profil = req.file.filename; 
     }
     console.log(req.file)
     let newMedecin = new medecin(data);
@@ -38,10 +38,13 @@ const register = async (req, res) => {
 
     const salt = bcrypt.genSaltSync(10);
     newMedecin.password = bcrypt.hashSync(data.password, salt);
-    await newMedecin.save();
+        await sendVerificationEmail(newMedecin.email, activationCode);
+        if(sendVerificationEmail){
+    await newMedecin.save();}
+    else{res.status(401).send("email introuvable ")}
 
     // Envoi de l'email de vérification
-    await sendVerificationEmail(newMedecin.email, newMedecin.cin_medecin, activationCode);
+
 
     res.status(200).send({ message: "Inscription réussie. Vérifiez votre email pour activer votre compte.", medecin: newMedecin });
 
@@ -53,7 +56,7 @@ const register = async (req, res) => {
 const verifMedecin = async (req, res) => {
   try {
     let actifcode = req.params.activationcode;
-    actifcode = actifcode.substring(1);
+    //actifcode = actifcode.substring(1);
 
     const recherche = await medecin.findOne({ activationCode: actifcode });
 

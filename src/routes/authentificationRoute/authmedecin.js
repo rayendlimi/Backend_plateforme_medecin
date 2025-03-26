@@ -19,5 +19,5 @@ const upload = multer({ storage });
 router.post("/register", upload.single("photo_profil"), medecinController.register);
 router.post("/verifmedecin/:activationcode", medecinController.verifMedecin);
 router.get("/all", medecinController.getAllMedecins);
-
+router.delete("/delete", medecinController.deleteAllMedecins)
 module.exports = router;

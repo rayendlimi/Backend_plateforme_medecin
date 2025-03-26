@@ -5,7 +5,7 @@ const medecin = require("../../models/medecin");
 const register = async (req, res) => {
   try {
     const data = req.body;
-    console.log("Req user:", req.user.userId); // Vérifier si req.user est bien rempli
+    console.log("Req user:", req.user.userId); 
 
     const id_medecin = req.user.userId;
     const authmed = await medecin.findOne({_id: id_medecin });
@@ -37,7 +37,6 @@ const existingSecretaire = await secretaire.findOne({ cin_medecin: authmed.cin_m
   }
 };
 
-// Export des contrôleurs
 module.exports = {
   register,
 };
